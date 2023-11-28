@@ -1,17 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+    <ion-title>Módulo 2: texto a voz</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-textarea [(ngModel)]="texto" label="Texto" labelPlacement="floating" fill="outline" placeholder="Ingresa un texto" [autoGrow]="true"></ion-textarea>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-select [(ngModel)]="itemSeleccionado" label="Idioma" label-placement="floating" fill="outline">
+          <ion-select-option value="spanish">Español</ion-select-option>
+          <ion-select-option value="english">Inglés</ion-select-option>
+          <ion-select-option value="french">Francés</ion-select-option>
+          <ion-select-option value="german">Alemán</ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="procesarFormulario()" expand="full">Traducir</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
