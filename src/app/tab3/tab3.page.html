@@ -1,6 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Módulo 2: texto a voz</ion-title>
+    <ion-title>Traductor Mary</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button fill="outline" (click)="logout()">
+        Salir
+        <ion-icon slot="end" name="log-out-outline" (click)="logout()"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -8,16 +14,18 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-textarea [(ngModel)]="texto" label="Texto" labelPlacement="floating" fill="outline" placeholder="Ingresa un texto" [autoGrow]="true"></ion-textarea>
+        <ion-textarea [(ngModel)]="traduccionService.texto" label="Texto" labelPlacement="floating" fill="outline" placeholder="Ingresa un texto" [autoGrow]="true"></ion-textarea>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-select [(ngModel)]="itemSeleccionado" label="Idioma" label-placement="floating" fill="outline">
-          <ion-select-option value="spanish">Español</ion-select-option>
-          <ion-select-option value="english">Inglés</ion-select-option>
-          <ion-select-option value="french">Francés</ion-select-option>
-          <ion-select-option value="german">Alemán</ion-select-option>
+        <ion-select [(ngModel)]="traduccionService.idioma" label="Idioma" label-placement="floating" fill="outline">
+          <ion-select-option value="es">Español</ion-select-option>
+          <ion-select-option value="en">Inglés</ion-select-option>
+          <ion-select-option value="fr">Francés</ion-select-option>
+          <ion-select-option value="de">Alemán</ion-select-option>
+          <ion-select-option value="it">Italiano</ion-select-option>
+          <ion-select-option value="pt">Portugués</ion-select-option>
         </ion-select>
       </ion-col>
     </ion-row>

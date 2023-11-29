@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { ToastController, LoadingController, ActionSheetController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 import { PhotoService, UserPhoto } from '../services/photo.service';
-import { environment } from 'src/environments/environment';
+import { TraduccionService } from '../services/traduccion.service';
+import { AuthService, User } from '../services/auth.service';
 
 @Component({
   selector: 'app-tab2',
@@ -13,26 +16,43 @@ import { environment } from 'src/environments/environment';
 export class Tab2Page {
 
   apiUrl = environment.apiURL;
+  usuario: User;
 
   constructor(
+    private authService: AuthService,
     public photoService: PhotoService,
+    private traduccionService: TraduccionService,
     private toastController: ToastController,
     private loadingController: LoadingController,
     private actionSheetController: ActionSheetController,
     private http: HttpClient,
-    ) {}
+    private router: Router
+    ) {
+      this.getUser();
+    }
 
+  async getUser() {
+    this.usuario = await this.authService.getUserFromStorage()
+  }
+
+  async logout() {
+    await this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+  
   async ngOnInit() {
     await this.photoService.loadSaved();
   }
 
-  addPhotoToGallery() {
-    this.photoService.addNewToGallery();
+  async addPhotoToGallery() {
+    await this.photoService.addNewToGallery();
+    this.router.navigate(['/home/tabs/tab3']);
+    this.onButtonClick(this.photoService.photos[0]);
   }
 
   async onButtonClick(item: UserPhoto): Promise<void> {
     let base64 = item.base64?.replace("data:image/png;base64,", "");
-    const imageData = { imagen: base64 };
+    const imageData = { imagen: base64, usuario: this.usuario.usuario };
 
     const loading = await this.loadingController.create({
       message: 'Cargando...', // Puedes personalizar el mensaje
@@ -43,15 +63,7 @@ export class Tab2Page {
     this.http.post(`${this.apiUrl}/cargar_imagen`, imageData).subscribe({
       next: async (value: any) => {
         await loading.dismiss();
-
-        // Maneja la respuesta según tus necesidades
-        const toast = await this.toastController.create({
-          message: `Traducción: ${value.translation}`,
-          duration: 2000,
-          position: 'bottom',
-          color: 'success'
-        });
-        toast.present();
+        this.traduccionService.texto = value.texto_reconocido;
       },
       error: async (err) => {
         // Maneja los errores

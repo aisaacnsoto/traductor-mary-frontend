@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { ToastController, LoadingController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
+import { TraduccionService } from '../services/traduccion.service';
 import { environment } from 'src/environments/environment';
+import { AuthService, User } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
@@ -11,18 +14,36 @@ import { environment } from 'src/environments/environment';
 export class Tab3Page {
 
   apiUrl = environment.apiURL;
+  usuario: User;
 
-  texto: string = '';
-  itemSeleccionado: string = '';
+  itemSeleccionado: string = 'spanish';
 
   constructor(
+    private authService: AuthService,
     private toastController: ToastController,
     private loadingController: LoadingController,
     private http: HttpClient,
-  ) {}
+    public traduccionService: TraduccionService,
+    private router: Router
+  ) {
+    this.getUser();
+  }
 
+  async getUser() {
+    this.usuario = await this.authService.getUserFromStorage()
+  }
+
+  async logout() {
+    await this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+  
   async procesarFormulario(): Promise<void> {
-    const data = { texto: this.texto, idioma: this.itemSeleccionado };
+    const data = {
+      texto: this.traduccionService.texto,
+      idioma: this.traduccionService.idioma,
+      usuario: this.usuario.usuario
+    };
 
     const loading = await this.loadingController.create({
       message: 'Cargando...', // Puedes personalizar el mensaje
