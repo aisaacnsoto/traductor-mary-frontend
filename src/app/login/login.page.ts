@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,6 +17,8 @@ export class LoginPage implements OnInit {
       text: 'OK',
       role: 'confirm',
       handler: () => {
+        this.username = '';
+        this.password = '';
         this.router.navigate(['/home/tabs/tab2']);
       },
     },
@@ -25,6 +27,7 @@ export class LoginPage implements OnInit {
   constructor(
     private authService: AuthService,
     private alertController: AlertController,
+    private loadingController: LoadingController,
     private router: Router,
     ) {
       this.validarLogin();
@@ -36,9 +39,17 @@ export class LoginPage implements OnInit {
     }
   }
 
-  login(): void {
+  async login(): Promise<void> {
+    
     if (this.username && this.password) {
+      const loading = await this.loadingController.create({
+        message: 'Cargando...',
+      });
+  
+      await loading.present();
+
       this.authService.login(this.username, this.password).subscribe(async (response) =>  {
+        await loading.dismiss();
         // Manejar la respuesta del servidor, por ejemplo, mostrar un mensaje
         const alert = await this.alertController.create({
           header: 'Éxito',
@@ -50,8 +61,13 @@ export class LoginPage implements OnInit {
         
       });
     } else {
-      // Manejar caso donde el usuario no haya ingresado nombre de usuario o contraseña
-      console.log('Por favor, ingrese nombre de usuario y contraseña.');
+      const alert = await this.alertController.create({
+        header: 'Rellene los campos',
+        message: 'Por favor, ingrese nombre de usuario y contraseña.',
+        buttons: ['Ok']
+      });
+  
+      await alert.present();
     }
   }
 

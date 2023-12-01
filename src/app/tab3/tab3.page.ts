@@ -92,4 +92,8 @@ export class Tab3Page {
     });
   }
 
+  capturarTexto() {
+    this.router.navigate(['/home/tabs/tab2']);
+  }
+
 }

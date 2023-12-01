@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastController, LoadingController, ActionSheetController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -13,10 +13,11 @@ import { AuthService, User } from '../services/auth.service';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
-export class Tab2Page {
+export class Tab2Page implements OnInit {
 
   apiUrl = environment.apiURL;
   usuario: User;
+  nombreUsuario = '';
 
   constructor(
     private authService: AuthService,
@@ -30,9 +31,12 @@ export class Tab2Page {
     ) {
       this.getUser();
     }
+  
+  
 
   async getUser() {
-    this.usuario = await this.authService.getUserFromStorage()
+    this.usuario = await this.authService.getUserFromStorage();
+    this.nombreUsuario = this.usuario.nombre;
   }
 
   async logout() {
@@ -42,6 +46,7 @@ export class Tab2Page {
   
   async ngOnInit() {
     await this.photoService.loadSaved();
+    this.getUser();
   }
 
   async addPhotoToGallery() {
@@ -55,7 +60,7 @@ export class Tab2Page {
     const imageData = { imagen: base64, usuario: this.usuario.usuario };
 
     const loading = await this.loadingController.create({
-      message: 'Cargando...', // Puedes personalizar el mensaje
+      message: 'Cargando...',
     });
 
     await loading.present();

@@ -13,12 +13,19 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col size="6" *ngFor="let photo of photoService.photos; index as position">
-        <ion-img [src]="photo.webviewPath" (click)="showActionSheet(photo, position)"></ion-img>
-        <ion-button (click)="onButtonClick(photo)" expand="full">Traducir</ion-button>
+      <ion-col>
+        <img src="assets/logo.png" width="100" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+
+        <ion-text><h1>Hola, {{nombreUsuario}}.</h1></ion-text>
+        <ion-text><h5>Presiona el botón de la cámara para empezar a detectar el texto.</h5></ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>
+  
   
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="addPhotoToGallery()">
