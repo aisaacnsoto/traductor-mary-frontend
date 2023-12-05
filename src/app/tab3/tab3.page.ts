@@ -5,6 +5,7 @@ import { TraduccionService } from '../services/traduccion.service';
 import { environment } from 'src/environments/environment';
 import { AuthService, User } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-tab3',
@@ -26,7 +27,13 @@ export class Tab3Page {
     public traduccionService: TraduccionService,
     private router: Router
   ) {
+    this.configurarApiUrl();
     this.getUser();
+  }
+
+  async configurarApiUrl() {
+    const { value } = await Preferences.get({ key: 'api_url' });
+    this.apiUrl = value;
   }
 
   async getUser() {

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { TraduccionService } from '../services/traduccion.service';
 import { AuthService, User } from '../services/auth.service';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-tab2',
@@ -29,8 +30,14 @@ export class Tab2Page implements OnInit {
     private http: HttpClient,
     private router: Router
     ) {
+      this.configurarApiUrl();
       this.getUser();
     }
+
+  async configurarApiUrl() {
+    const { value } = await Preferences.get({ key: 'api_url' });
+    this.apiUrl = value;
+  }
   
   
 

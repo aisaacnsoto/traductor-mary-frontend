@@ -12,6 +12,12 @@ export class AuthService {
   private apiUrl = environment.apiURL;
 
   constructor(private http: HttpClient) {
+    this.configurarApiUrl();
+  }
+
+  async configurarApiUrl() {
+    const { value } = await Preferences.get({ key: 'api_url' });
+    this.apiUrl = value;
   }
 
   login(username: string, password: string): Observable<any> {

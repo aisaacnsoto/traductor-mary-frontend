@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: 'https://5773-132-191-1-172.ngrok-free.app'
+  apiURL: 'https://dominiodelservicio.com'
 };
 
 /*
